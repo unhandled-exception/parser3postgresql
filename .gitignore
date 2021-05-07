@@ -1,0 +1,14 @@
+autom4te.cache/
+.deps/
+libltdl/**
+.libs/
+Makefile
+config.log
+config.status
+config_auto.h
+libtool
+stamp-h1
+config_auto.h.in~
+compile
+*.lo
+*.la
