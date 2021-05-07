@@ -99,7 +99,6 @@ struct Connection {
 	SQL_Driver_services* services;
 
 	PGconn *conn;
-	const char* client_charset;
 };
 
 /**
@@ -139,7 +138,6 @@ public:
 
 		*connection_ref=&connection;
 		connection.services=&services;
-		connection.client_charset=0;
 
 		char *pg_url = (char*)connection.services->malloc_atomic(strlen(url) + strlen(PG_CONNECT_STRING_PREFIX) + 1);
 		*pg_url = 0;
@@ -192,9 +190,6 @@ public:
 		Connection& connection=*static_cast<Connection*>(aconnection);
 		SQL_Driver_services& services=*connection.services;
 		PGconn *conn=connection.conn;
-
-		const char* client_charset=connection.client_charset;
-		const char* request_charset=services.request_charset();
 
 		const char** paramValues;
 		if(placeholders_count>0){
