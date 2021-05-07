@@ -170,35 +170,16 @@ public:
 		return PQstatus(connection.conn)==CONNECTION_OK;
 	}
 
-	// charset here is services.request_charset(), not connection.client_charset
-	// thus we can't use the sql server quoting support
 	const char* quote(void *aconnection, const char *str, unsigned int length)
 	{
 		Connection& connection=*static_cast<Connection*>(aconnection);
 
-		const char* from;
-		const char* from_end=str+length;
+		char *result=(char*)connection.services->malloc_atomic(length*2 + 1);
+		int error = 0;
+		PQescapeStringConn(connection.conn, result, str, strlen(str), &error);
+		if(error)
+			throwPQerror;
 
-		size_t quoted=0;
-
-		for(from=str; from<from_end; from++){
-			if(*from=='\'')
-				quoted++;
-		}
-
-		if(!quoted)
-			return str;
-
-		char *result=(char*)connection.services->malloc_atomic(length + quoted + 1);
-		char *to = result;
-
-		for(from=str; from<from_end; from++){
-			if(*from=='\'')
-				*to++= '\''; // "'" -> "''"
-			*to++=*from;
-		}
-
-		*to=0;
 		return result;
 	}
 
