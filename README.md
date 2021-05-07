@@ -9,7 +9,7 @@
 
 ```
 > cd ~/parser3project/sql/
-> git co https://github.com/unhandled-exception/parser3postgresql.git ./postgresql
+> git clone https://github.com/unhandled-exception/parser3postgresql.git ./postgresql
 > ./configure
 > make
 ```
